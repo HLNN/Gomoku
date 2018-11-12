@@ -10,11 +10,28 @@ using System.Windows.Forms;
 
 namespace Gomoku
 {
-    public partial class Form1 : Form
+    public partial class Gomoku : Form
     {
-        public Form1()
+        Graphics graphic;
+
+        //是否开始
+        static bool start;
+
+        int[,] ChessBack = new int[20, 20];
+        
+
+        public Gomoku()
         {
             InitializeComponent();
+            this.Width = MainSize.Wid;
+            this.Height = MainSize.Hei;
+            this.ChessBox.Width = MainSize.CBWid;
+            this.ChessBox.Height = MainSize.CBHei;
+        }
+
+        private void Gomoku_Load(object sender, EventArgs e)
+        {
+            ChessBoard.DrawCB(graphic, this.ChessBox);
         }
     }
 }
