@@ -14,8 +14,8 @@ namespace Gomoku
         //棋盘行数
         public static int CBLine { get { return 15; } }
         //棋盘大小
-        public static int CBWid { get { return 1000; } }
-        public static int CBHei { get { return 1000; } }
+        public static int CBWid { get { return 800; } }
+        public static int CBHei { get { return 800; } }
         //棋盘宽度
         public static int CBGap { get { return 50; } }
         //棋子直径

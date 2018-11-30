@@ -15,6 +15,11 @@ namespace Gomoku
         static readonly float penWid = 1.0f;
         static readonly Pen pen = new Pen(color, penWid);
 
+
+        //设置棋盘网隔相对于PicBox原点的偏移
+        static readonly int offsetX = 30;
+        static readonly int offsetY = 30;
+
         public static void DrawCB(Graphics gra, PictureBox pic)
         {
             //每排数量
@@ -28,9 +33,6 @@ namespace Gomoku
             //设置字体
             Font drawFont = new Font("Arial", 12);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            //设置棋盘网隔相对于PicBox原点的偏移
-            int offsetX = 30;
-            int offsetY = 30;
             Image img = new Bitmap(CBWid + offsetX + 10, CBHei + offsetY + 10);
             gra = Graphics.FromImage(img);
             //画棋盘
