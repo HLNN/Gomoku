@@ -15,7 +15,7 @@ namespace Gomoku
         static readonly int offsetX = 30;
         static readonly int offsetY = 30;
 
-        public static void DrawCB(Gomoku gomoku, Graphics gra, PictureBox pic)
+        public static void DrawCB(Gomoku gomoku, Graphics gra, PictureBox pic, bool onlyboard=false)
         {
             //每排数量
             int horC = MainSize.CBLine;
@@ -41,22 +41,25 @@ namespace Gomoku
             gra.DrawLine(Gomoku.pen, 0 + offsetX, horC * gap + offsetY, CBWid + offsetX, horC * gap + offsetY);
             gra.DrawLine(Gomoku.pen, horC * gap + offsetX, 0 + offsetY, horC * gap + offsetX, CBHei + offsetY);
 
-            for (int i = 0; i < 15; i++)
+            if (!onlyboard)
             {
-                for (int j = 0; j < 15; j++)
+                for (int i = 0; i < 15; i++)
                 {
-                    switch (gomoku.Chess(i, j))
+                    for (int j = 0; j < 15; j++)
                     {
-                        case 1:
-                            gra.FillEllipse(Gomoku.blackBrush, i * 50 + 15, j * 50 + 15, 30, 30);
-                            break;
-                        case 2:
-                            gra.FillEllipse(Gomoku.whiteBrush, i * 50 + 15, j * 50 + 15, 30, 30);
-                            break;
+                        switch (gomoku.Chess(i, j))
+                        {
+                            case 1:
+                                gra.FillEllipse(Gomoku.blackBrush, i * 50 + 15, j * 50 + 15, 30, 30);
+                                break;
+                            case 2:
+                                gra.FillEllipse(Gomoku.whiteBrush, i * 50 + 15, j * 50 + 15, 30, 30);
+                                break;
+                        }
                     }
                 }
             }
-
+            
             pic.Image = img;
         }
     }
