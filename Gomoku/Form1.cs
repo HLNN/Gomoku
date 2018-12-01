@@ -17,7 +17,7 @@ namespace Gomoku
         private
         //是否开始
         bool start = false;
-        bool ableToMove = false;
+        bool allowToMove = false;
         bool humanVShuman = false;
         bool humanVSai = false;
 
@@ -55,7 +55,7 @@ namespace Gomoku
             global::Gomoku.ChessBoard.DrawCB(graphic, this.ChessBoard);
 
             this.start = false;
-            bool ableToMove = false;
+            this.allowToMove = false;
             this.humanVShuman = false;
             this.humanVSai = false;
 
@@ -222,7 +222,7 @@ namespace Gomoku
 
         private void ChessBoard_MouseClick(object sender, MouseEventArgs e)
         {
-            if (this.start)
+            if (this.start && this.allowToMove)
             {
                 if (Chess[(e.X - 5) / 50, (e.Y - 5) / 50] != 0)
                 {
@@ -297,7 +297,7 @@ namespace Gomoku
         {
             this.restart_for_new_game();
             this.start = true;
-            bool ableToMove = true;
+            this.allowToMove = true;
             this.humanVShuman = true;
             this.timer1.Enabled = true;
         }
