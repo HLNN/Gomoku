@@ -8,29 +8,73 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Newtonsoft.Json;
+
 namespace Gomoku
 {
+    [Serializable]
+    public class Game
+    {
+
+        Graphics graphic;
+
+
+        static readonly DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+        readonly long gameStartTime = (long)(DateTime.Now - startTime).TotalMilliseconds;
+
+
+        //是否开始
+        public bool Start { get; set; }
+
+        public bool AllowToMove { get; set; }
+        public bool HumanVShuman { get; set; }
+        public bool HumanVSai { get; set; }
+
+        public int WhoToMove { get; set; }
+        public int Winner { get; set; }
+
+        public int BlackTime { get; set; }
+        public int WhiteTime { get; set; }
+        public int BlackTimeThis { get; set; }
+        public int WhiteTimeThis { get; set; }
+
+        // 1 for player 1(black) 2 for player 2(white)
+        public int[,] Chess = new int[15, 15];
+
+        public Game()
+        {
+
+            this.Start = false;
+            this.AllowToMove = false;
+            this.HumanVShuman = false;
+            this.HumanVSai = false;
+
+            this.WhoToMove = 1;
+            this.Winner = 0;
+
+            for (int i = 0; i < 15; i++)
+            {
+                for (int j = 0; j < 15; j++)
+                {
+                    Chess[i, j] = 0;
+                }
+            }
+
+            this.BlackTime = 0;
+            this.WhiteTime = 0;
+            this.BlackTimeThis = 0;
+            this.WhiteTimeThis = 0;
+
+        }
+    }
+
     public partial class Gomoku : Form
     {
         Graphics graphic;
-        
+
         private
-        //是否开始
-        bool start = false;
-        bool allowToMove = false;
-        bool humanVShuman = false;
-        bool humanVSai = false;
 
-        int whoToMove = 0;
-        int winner = 0;
-
-        int blackTime = 0;
-        int whiteTime = 0;
-        int blackTimeThis = 0;
-        int whiteTimeThis = 0;
-
-        // 1 for player 1(black) 2 for player 2(white)
-        int[,] Chess = new int[15, 15];
+        Game game;
         
         static readonly Pen pen = new Pen(Color.Black, 1.0f);
         static readonly Brush whiteBrush = new SolidBrush(Color.FromArgb(255, 255, 255));
@@ -52,28 +96,8 @@ namespace Gomoku
 
         private void restart_for_new_game()
         {
+            this.game = new Game();
             global::Gomoku.ChessBoard.DrawCB(graphic, this.ChessBoard);
-
-            this.start = false;
-            this.allowToMove = false;
-            this.humanVShuman = false;
-            this.humanVSai = false;
-
-            this.whoToMove = 1;
-            int winner = 0;
-
-            for (int i = 0; i < 15; i++)
-            {
-                for (int j = 0; j < 15; j++)
-                {
-                    Chess[i, j] = 0;
-                }
-            }
-
-            this.blackTime = 0;
-            this.whiteTime = 0;
-            this.blackTimeThis = 0;
-            this.whiteTimeThis = 0;
 
             this.timer1.Enabled = false;
             this.black_time_all.Text = "局时: 0秒";
@@ -84,30 +108,30 @@ namespace Gomoku
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if(this.start)
+            if(this.game.Start)
             {
-                if (whoToMove == 1)
+                if (this.game.WhoToMove == 1)
                 {
-                    blackTime++;
-                    blackTimeThis++;
+                    this.game.BlackTime++;
+                    this.game.BlackTimeThis++;
 
-                    this.black_time_all.Text = "局时: " + Convert.ToString(blackTime) + "秒";
-                    this.black_time_this.Text = "步时: " + Convert.ToString(blackTimeThis) + "秒";
+                    this.black_time_all.Text = "局时: " + Convert.ToString(this.game.BlackTime) + "秒";
+                    this.black_time_this.Text = "步时: " + Convert.ToString(this.game.BlackTimeThis) + "秒";
 
-                    if (blackTimeThis >= 15)
+                    if (this.game.BlackTimeThis >= 15)
                     {
 
                     }
                 }
-                if (this.whoToMove == 2)
+                if (this.game.WhoToMove == 2)
                 {
-                    whiteTime++;
-                    whiteTimeThis++;
+                    this.game.WhiteTime++;
+                    this.game.WhiteTimeThis++;
 
-                    this.white_time_all.Text = "局时: " + Convert.ToString(whiteTime) + "秒";
-                    this.white_time_this.Text = "步时: " + Convert.ToString(whiteTimeThis) + "秒";
+                    this.white_time_all.Text = "局时: " + Convert.ToString(this.game.WhiteTime) + "秒";
+                    this.white_time_this.Text = "步时: " + Convert.ToString(this.game.WhiteTimeThis) + "秒";
 
-                    if (whiteTimeThis >= 15)
+                    if (this.game.WhiteTimeThis >= 15)
                     {
 
                     }
@@ -117,13 +141,13 @@ namespace Gomoku
 
         private bool check_win_point(int x, int y)
         {
-            if (Chess[x, y] == 0)
+            if (this.game.Chess[x, y] == 0)
             {
                 return false;
             }
 
             bool f;
-            int chessColor = Chess[x, y];
+            int chessColor = this.game.Chess[x, y];
 
             // right
             if (x + 5 < 15)
@@ -132,7 +156,7 @@ namespace Gomoku
 
                 for (int k = 1; k <= 4; k++)
                 {
-                    if (Chess[x + k, y] != chessColor)
+                    if (this.game.Chess[x + k, y] != chessColor)
                     {
                         f = false;
                         break;
@@ -140,7 +164,7 @@ namespace Gomoku
                 }
                 if (f)
                 {
-                    this.winner = chessColor;
+                    this.game.Winner = chessColor;
                     return true;
                 }
             }
@@ -151,7 +175,7 @@ namespace Gomoku
 
                 for (int k = 1; k <= 4; k++)
                 {
-                    if (Chess[x, y + k] != chessColor)
+                    if (this.game.Chess[x, y + k] != chessColor)
                     {
                         f = false;
                         break;
@@ -159,7 +183,7 @@ namespace Gomoku
                 }
                 if (f)
                 {
-                    this.winner = chessColor;
+                    this.game.Winner = chessColor;
                     return true;
                 }
             }
@@ -170,7 +194,7 @@ namespace Gomoku
 
                 for (int k = 1; k <= 4; k++)
                 {
-                    if (Chess[x + k, y + k] != chessColor)
+                    if (this.game.Chess[x + k, y + k] != chessColor)
                     {
                         f = false;
                         break;
@@ -178,7 +202,7 @@ namespace Gomoku
                 }
                 if (f)
                 {
-                    this.winner = chessColor;
+                    this.game.Winner = chessColor;
                     return true;
                 }
             }
@@ -189,7 +213,7 @@ namespace Gomoku
 
                 for (int k = 1; k <= 4; k++)
                 {
-                    if (Chess[x + k, y - k] != chessColor)
+                    if (this.game.Chess[x + k, y - k] != chessColor)
                     {
                         f = false;
                         break;
@@ -197,7 +221,7 @@ namespace Gomoku
                 }
                 if (f)
                 {
-                    this.winner = chessColor;
+                    this.game.Winner = chessColor;
                     return true;
                 }
             }
@@ -222,9 +246,9 @@ namespace Gomoku
 
         private void ChessBoard_MouseClick(object sender, MouseEventArgs e)
         {
-            if (this.start && this.allowToMove)
+            if (this.game.Start && this.game.AllowToMove)
             {
-                if (Chess[(e.X - 5) / 50, (e.Y - 5) / 50] != 0)
+                if (this.game.Chess[(e.X - 5) / 50, (e.Y - 5) / 50] != 0)
                 {
                     MessageBox.Show("这个地方已经下过了!!!");
                 }
@@ -232,17 +256,17 @@ namespace Gomoku
                 {
                     if (e.X >= 5 && e.X <= 755 && e.Y >= 5 && e.Y <= 755)
                     {
-                        this.blackTimeThis = 0;
-                        this.whiteTimeThis = 0;
+                        this.game.BlackTimeThis = 0;
+                        this.game.WhiteTimeThis = 0;
                         this.black_time_this.Text = "步时: 0秒";
                         this.white_time_this.Text = "步时: 0秒";
 
-                        Chess[(e.X - 5) / 50, (e.Y - 5) / 50] = this.whoToMove;
+                        this.game.Chess[(e.X - 5) / 50, (e.Y - 5) / 50] = this.game.WhoToMove;
 
                         Image img = this.ChessBoard.Image;
                         Graphics gra = Graphics.FromImage(img);
                         // gra.DrawEllipse(pen, e.X, e.Y, 33, 33);
-                        switch (this.whoToMove)
+                        switch (this.game.WhoToMove)
                         {
                             case 1:
                                 gra.FillEllipse(blackBrush, (e.X - 5) / 50 * 50 + 15, (e.Y - 5) / 50 * 50 + 15, 30, 30);
@@ -251,32 +275,33 @@ namespace Gomoku
                                 gra.FillEllipse(whiteBrush, (e.X - 5) / 50 * 50 + 15, (e.Y - 5) / 50 * 50 + 15, 30, 30);
                                 break;
                         }
-
                         this.ChessBoard.Image = img;
 
                         
                         if (this.check_win() )
                         {
-                            this.start = false;
-                            MessageBox.Show(Convert.ToString(this.whoToMove) + " WIN!!!");
+                            this.game.Start = false;
+                            switch(this.game.Winner)
+                            {
+                                case 1:
+                                    MessageBox.Show("BLACK WIN!!!");
+                                    break;
+                                case 2:
+                                    MessageBox.Show("WHITE WIN!!!");
+                                    break;
+                            }
                         }
 
-                        if (this.humanVShuman)
+                        if (this.game.HumanVShuman)
                         {
-                            this.whoToMove = 3 - this.whoToMove;
+                            this.game.WhoToMove = 3 - this.game.WhoToMove;
                         }
-                        if (this.humanVSai)
+                        if (this.game.HumanVSai)
                         {
 
                         }
                     }
                 }
-                
-                    
-
-                
-
-                
             }
         }
 
@@ -287,18 +312,20 @@ namespace Gomoku
 
         private void ChessBoard_Click(object sender, EventArgs e)
         {
+
         }
 
         private void ChessBox_Click(object sender, EventArgs e)
         {
+
         }
 
         private void 玩家VS玩家ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.restart_for_new_game();
-            this.start = true;
-            this.allowToMove = true;
-            this.humanVShuman = true;
+            this.game.Start = true;
+            this.game.AllowToMove = true;
+            this.game.HumanVShuman = true;
             this.timer1.Enabled = true;
         }
 
@@ -314,7 +341,8 @@ namespace Gomoku
 
         private void 保存棋局ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            string json = JsonConvert.SerializeObject(this.game);
+            MessageBox.Show(json);
         }
 
         private void 复盘ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -322,4 +350,5 @@ namespace Gomoku
 
         }
     }
+
 }
