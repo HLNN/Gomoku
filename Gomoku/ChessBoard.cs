@@ -11,16 +11,11 @@ namespace Gomoku
 {
     class ChessBoard
     {
-        static readonly Color color = Color.Black;
-        static readonly float penWid = 1.0f;
-        static readonly Pen pen = new Pen(color, penWid);
-
-
         //设置棋盘网隔相对于PicBox原点的偏移
         static readonly int offsetX = 30;
         static readonly int offsetY = 30;
 
-        public static void DrawCB(Graphics gra, PictureBox pic)
+        public static void DrawCB(Gomoku gomoku, Graphics gra, PictureBox pic)
         {
             //每排数量
             int horC = MainSize.CBLine;
@@ -38,13 +33,30 @@ namespace Gomoku
             //画棋盘
             for (int i = 0; i < horC; i++)
             {
-                gra.DrawLine(pen, 0 + offsetX, i * gap + offsetY, CBWid + offsetX, i * gap + offsetY);
-                gra.DrawLine(pen, i * gap + offsetX, 0 + offsetY, i * gap + offsetX, CBHei + offsetY);
+                gra.DrawLine(Gomoku.pen, 0 + offsetX, i * gap + offsetY, CBWid + offsetX, i * gap + offsetY);
+                gra.DrawLine(Gomoku.pen, i * gap + offsetX, 0 + offsetY, i * gap + offsetX, CBHei + offsetY);
                 gra.DrawString(Convert.ToString(i + 1), drawFont, drawBrush, 0, i * gap + 20);
                 gra.DrawString(Convert.ToString((char)(65 + i)), drawFont, drawBrush, i * gap + 20, 0);
             }
-            gra.DrawLine(pen, 0 + offsetX, horC * gap + offsetY, CBWid + offsetX, horC * gap + offsetY);
-            gra.DrawLine(pen, horC * gap + offsetX, 0 + offsetY, horC * gap + offsetX, CBHei + offsetY);
+            gra.DrawLine(Gomoku.pen, 0 + offsetX, horC * gap + offsetY, CBWid + offsetX, horC * gap + offsetY);
+            gra.DrawLine(Gomoku.pen, horC * gap + offsetX, 0 + offsetY, horC * gap + offsetX, CBHei + offsetY);
+
+            for (int i = 0; i < 15; i++)
+            {
+                for (int j = 0; j < 15; j++)
+                {
+                    switch (gomoku.Chess(i, j))
+                    {
+                        case 1:
+                            gra.FillEllipse(Gomoku.blackBrush, i * 50 + 15, j * 50 + 15, 30, 30);
+                            break;
+                        case 2:
+                            gra.FillEllipse(Gomoku.whiteBrush, i * 50 + 15, j * 50 + 15, 30, 30);
+                            break;
+                    }
+                }
+            }
+
             pic.Image = img;
         }
     }

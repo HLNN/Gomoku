@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.IO;
 using Newtonsoft.Json;
 
 namespace Gomoku
@@ -25,6 +25,7 @@ namespace Gomoku
 
         //是否开始
         public bool Start { get; set; }
+        public int Steps { get; set; }
 
         public bool AllowToMove { get; set; }
         public bool HumanVShuman { get; set; }
@@ -40,6 +41,21 @@ namespace Gomoku
 
         // 1 for player 1(black) 2 for player 2(white)
         public int[,] Chess = new int[15, 15];
+        public long[,] moves = new long[230, 4];
+
+        public void Move(int x, int y)
+        {
+            Chess[x, y] = WhoToMove;
+            
+            long moveTime = (long)(DateTime.Now - startTime).TotalMilliseconds - gameStartTime;
+            
+            moves[Steps, 0] = WhoToMove;
+            moves[Steps, 1] = moveTime;
+            moves[Steps, 2] = x;
+            moves[Steps, 3] = y;
+
+            Steps++;
+        }
 
         public Game()
         {
@@ -49,8 +65,8 @@ namespace Gomoku
             this.HumanVShuman = false;
             this.HumanVSai = false;
 
-            this.WhoToMove = 1;
-            this.Winner = 0;
+            WhoToMove = 1;
+            Winner = 0;
 
             for (int i = 0; i < 15; i++)
             {
@@ -59,11 +75,18 @@ namespace Gomoku
                     Chess[i, j] = 0;
                 }
             }
+            for (int i = 0; i < 230; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    moves[i, j] = 0;
+                }
+            }
 
-            this.BlackTime = 0;
-            this.WhiteTime = 0;
-            this.BlackTimeThis = 0;
-            this.WhiteTimeThis = 0;
+            BlackTime = 0;
+            WhiteTime = 0;
+            BlackTimeThis = 0;
+            WhiteTimeThis = 0;
 
         }
     }
@@ -76,10 +99,10 @@ namespace Gomoku
 
         Game game;
         
-        static readonly Pen pen = new Pen(Color.Black, 1.0f);
-        static readonly Brush whiteBrush = new SolidBrush(Color.FromArgb(255, 255, 255));
-        static readonly Brush blackBrush = new SolidBrush(Color.FromArgb(0, 0, 0));
-
+        static readonly public Pen pen = new Pen(Color.Black, 1.0f);
+        static readonly public Brush whiteBrush = new SolidBrush(Color.FromArgb(255, 255, 255));
+        static readonly public Brush blackBrush = new SolidBrush(Color.FromArgb(0, 0, 0));
+        
         public Gomoku()
         {
             InitializeComponent();
@@ -91,13 +114,13 @@ namespace Gomoku
 
         private void Gomoku_Load(object sender, EventArgs e)
         {
-            global::Gomoku.ChessBoard.DrawCB(graphic, this.ChessBoard);
+            global::Gomoku.ChessBoard.DrawCB(this, graphic, this.ChessBoard);
         }
 
         private void restart_for_new_game()
         {
             this.game = new Game();
-            global::Gomoku.ChessBoard.DrawCB(graphic, this.ChessBoard);
+            global::Gomoku.ChessBoard.DrawCB(this, graphic, this.ChessBoard);
 
             this.timer1.Enabled = false;
             this.black_time_all.Text = "局时: 0秒";
@@ -261,7 +284,7 @@ namespace Gomoku
                         this.black_time_this.Text = "步时: 0秒";
                         this.white_time_this.Text = "步时: 0秒";
 
-                        this.game.Chess[(e.X - 5) / 50, (e.Y - 5) / 50] = this.game.WhoToMove;
+                        this.game.Move((e.X - 5) / 50, (e.Y - 5) / 50);
 
                         Image img = this.ChessBoard.Image;
                         Graphics gra = Graphics.FromImage(img);
@@ -336,18 +359,64 @@ namespace Gomoku
 
         private void 导入棋局ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "json(*.json)|*.json|txt(*.txt)|*.txt";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    StreamReader streamReader = new StreamReader(openFileDialog.FileName);
+                    string json = streamReader.ReadToEnd();
+                    MessageBox.Show(json);
 
+                    Game loadGame = JsonConvert.DeserializeObject<Game>(json);
+                    this.restart_for_new_game();
+                    this.game = loadGame;
+                    this.timer1.Enabled = true;
+                    global::Gomoku.ChessBoard.DrawCB(this, graphic, this.ChessBoard);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("READ ERROR!!!");
+            }
         }
 
         private void 保存棋局ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string json = JsonConvert.SerializeObject(this.game);
-            MessageBox.Show(json);
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "json(*.json)|*.json|txt(*.txt)|*.txt";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    StreamWriter streamWriter = new StreamWriter(saveFileDialog.FileName);
+                    string json = JsonConvert.SerializeObject(this.game);
+                    streamWriter.Write(json);
+                    streamWriter.Close();
+                }
+                catch
+                {
+                    MessageBox.Show("SAVE ERROR!!!");
+                }
+            }
         }
 
         private void 复盘ToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public int Chess(int x, int y)
+        {
+            if (this.game == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return this.game.Chess[x, y];
+            }
         }
     }
 
