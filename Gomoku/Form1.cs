@@ -74,7 +74,7 @@ namespace Gomoku
             HumanVSai = false;
 
             WhoToMove = 1;
-            Winner = 0;
+            Winner = -1;
 
             for (int i = 0; i < 15; i++)
             {
@@ -106,7 +106,9 @@ namespace Gomoku
         private
 
         Game game;
-        
+        AI ai;
+
+
         static readonly public Pen pen = new Pen(Color.Black, 1.0f);
         static readonly public Brush whiteBrush = new SolidBrush(Color.FromArgb(255, 255, 255));
         static readonly public Brush blackBrush = new SolidBrush(Color.FromArgb(0, 0, 0));
@@ -137,6 +139,39 @@ namespace Gomoku
             this.black_time_this.Text = "步时: 0秒";
             this.white_time_all.Text = "局时: 0秒";
             this.white_time_this.Text = "步时: 0秒";
+        }
+
+        private void ai_move()
+        {
+            int x, y;
+            ai.Running(this.game.Chess, this.game.WhoToMove);
+            ai.GetNextStep(out x, out y);
+
+            if (x < 0 || x > 14 || y < 0 || y > 14 || this.game.Chess[x, y] != 0)
+            {
+                // AI lose
+            }
+
+
+            this.game.BlackTimeThis = 0;
+            this.game.WhiteTimeThis = 0;
+            this.black_time_this.Text = "步时: 0秒";
+            this.white_time_this.Text = "步时: 0秒";
+
+            this.game.Move(x, y);
+
+            Image img = this.ChessBoard.Image;
+            Graphics gra = Graphics.FromImage(img);
+            switch (this.game.WhoToMove)
+            {
+                case 1:
+                    gra.FillEllipse(blackBrush, x * 50 + 15, y * 50 + 15, 30, 30);
+                    break;
+                case 2:
+                    gra.FillEllipse(whiteBrush, x * 50 + 15, y * 50 + 15, 30, 30);
+                    break;
+            }
+            this.ChessBoard.Image = img;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -235,16 +270,11 @@ namespace Gomoku
 
         private bool check_win_point(int x, int y)
         {
-            if (this.game.Chess[x, y] == 0)
-            {
-                return false;
-            }
-
             bool f;
             int chessColor = this.game.Chess[x, y];
 
             // right
-            if (x + 5 < 15)
+            if (x + 5 <= 15)
             {
                 f = true;
 
@@ -263,7 +293,7 @@ namespace Gomoku
                 }
             }
             // down
-            if (y + 5 < 15)
+            if (y + 5 <= 15)
             {
                 f = true;
 
@@ -282,7 +312,7 @@ namespace Gomoku
                 }
             }
             // right down
-            if (x + 5 < 15 && y + 5 < 15)
+            if (x + 5 <= 15 && y + 5 <= 15)
             {
                 f = true;
 
@@ -301,7 +331,7 @@ namespace Gomoku
                 }
             }
             // right up
-            if (x + 5 < 15 && y - 5 >= 0)
+            if (x + 5 <= 15 && y - 5 >= 0)
             {
                 f = true;
 
@@ -325,25 +355,42 @@ namespace Gomoku
 
         private bool check_win()
         {
+            bool full = true;
             for (int i = 0; i < 15; i++)
             {
                 for (int j = 0; j < 15; j++)
                 {
-                    if (check_win_point(i, j))
+                    if (this.game.Chess[i, j] == 0)
                     {
-                        this.game.Start = false;
-                        switch (this.game.Winner)
-                        {
-                            case 1:
-                                MessageBox.Show("BLACK WIN!!!");
-                                break;
-                            case 2:
-                                MessageBox.Show("WHITE WIN!!!");
-                                break;
-                        }
-
-                        return true;
+                        full = false;
                     }
+                    else
+                    {
+                        if (check_win_point(i, j))
+                        {
+                            this.game.Start = false;
+                            switch (this.game.Winner)
+                            {
+                                case 1:
+                                    MessageBox.Show("BLACK WIN!!!", "WIN");
+                                    break;
+                                case 2:
+                                    MessageBox.Show("WHITE WIN!!!", "WIN");
+                                    break;
+                            }
+
+                            return true;
+                        }
+                    }
+                }
+
+                if (full)
+                {
+                    this.game.Start = false;
+                    this.game.Winner = 0;
+                    MessageBox.Show("DRAW!!!", "DRAW");
+
+                    return true;
                 }
             }
             return false;
@@ -355,30 +402,35 @@ namespace Gomoku
             {
                 if (this.game.Start && this.game.AllowToMove)
                 {
-                    if (this.game.Chess[(e.X - 5) / 50, (e.Y - 5) / 50] != 0)
+                    this.game.AllowToMove = false;
+
+                    int x = (e.X - 5) / 50;
+                    int y = (e.Y - 5) / 50;
+
+                    if (this.game.Chess[x, y] != 0)
                     {
-                        MessageBox.Show("这个地方已经下过了!!!");
+                        MessageBox.Show("这个地方已经下过了!!!", "WRONG");
                     }
                     else
                     {
-                        if (e.X >= 5 && e.X <= 755 && e.Y >= 5 && e.Y <= 755)
+                        if (x >= 0 && x < 15 && y >= 0 && y < 15)
                         {
                             this.game.BlackTimeThis = 0;
                             this.game.WhiteTimeThis = 0;
                             this.black_time_this.Text = "步时: 0秒";
                             this.white_time_this.Text = "步时: 0秒";
 
-                            this.game.Move((e.X - 5) / 50, (e.Y - 5) / 50);
-
+                            this.game.Move(x, y);
+                            
                             Image img = this.ChessBoard.Image;
                             Graphics gra = Graphics.FromImage(img);
                             switch (this.game.WhoToMove)
                             {
                                 case 1:
-                                    gra.FillEllipse(blackBrush, (e.X - 5) / 50 * 50 + 15, (e.Y - 5) / 50 * 50 + 15, 30, 30);
+                                    gra.FillEllipse(blackBrush, x * 50 + 15, y * 50 + 15, 30, 30);
                                     break;
                                 case 2:
-                                    gra.FillEllipse(whiteBrush, (e.X - 5) / 50 * 50 + 15, (e.Y - 5) / 50 * 50 + 15, 30, 30);
+                                    gra.FillEllipse(whiteBrush, x * 50 + 15, y * 50 + 15, 30, 30);
                                     break;
                             }
                             this.ChessBoard.Image = img;
@@ -393,12 +445,24 @@ namespace Gomoku
                             {
                                 this.game.WhoToMove = 3 - this.game.WhoToMove;
                             }
+
                             if (this.game.HumanVSai)
                             {
+                                this.game.WhoToMove = 3 - this.game.WhoToMove;
 
+                                ai_move();
+
+                                if (this.check_win())
+                                {
+                                    return;
+                                }
+                                
+                                this.game.WhoToMove = 3 - this.game.WhoToMove;
                             }
                         }
                     }
+
+                    this.game.AllowToMove = true;
                 }
             }
             catch
@@ -440,7 +504,28 @@ namespace Gomoku
 
         private void 玩家VSAIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("AI先生还在和自己下棋练习棋艺，下次再来找AI先生下棋吧!!!");
+            // MessageBox.Show("AI先生还在和自己下棋练习棋艺，下次再来找AI先生下棋吧!!!", "INFO");
+
+            try
+            {
+                DialogResult dialogResult = MessageBox.Show("AI先生很厉害的，你要持黑棋吗?", "", MessageBoxButtons.YesNo);
+                this.ai = new AI();
+                this.restart_for_new_game();
+                this.game.Start = true;
+                this.game.HumanVSai = true;
+                this.timer1.Enabled = true;
+                if (dialogResult == DialogResult.No)
+                {
+                    ai_move();
+                    this.game.WhoToMove = 3 - this.game.WhoToMove;
+                }
+                this.game.AllowToMove = true;
+            }
+            catch
+            {
+
+            }
+
         }
 
         private void 导入棋局ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -453,7 +538,7 @@ namespace Gomoku
                 {
                     StreamReader streamReader = new StreamReader(openFileDialog.FileName);
                     string json = streamReader.ReadToEnd();
-                    MessageBox.Show(json);
+                    // MessageBox.Show(json, "INFO");
 
                     Game loadGame = JsonConvert.DeserializeObject<Game>(json);
                     this.restart_for_new_game();
@@ -464,7 +549,7 @@ namespace Gomoku
             }
             catch
             {
-                MessageBox.Show("READ ERROR!!!");
+                MessageBox.Show("READ ERROR!!!", "ERROR");
             }
         }
 
@@ -483,7 +568,7 @@ namespace Gomoku
                 }
                 catch
                 {
-                    MessageBox.Show("SAVE ERROR!!!");
+                    MessageBox.Show("SAVE ERROR!!!", "ERROR");
                 }
             }
         }
