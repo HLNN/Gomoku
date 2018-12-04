@@ -20,6 +20,7 @@ namespace Gomoku
         private
 
         Game game;
+        Forbidden forbidden;
         AI ai;
 
         static readonly public Pen pen = new Pen(Color.Black, 1.0f);
@@ -45,6 +46,7 @@ namespace Gomoku
         private void restart_for_new_game()
         {
             this.game = new Game();
+            this.forbidden = new Forbidden(this.game);
             global::Gomoku.ChessBoard.DrawCB(this, graphic, this.ChessBoard);
 
             this.timer1.Enabled = false;
@@ -328,6 +330,42 @@ namespace Gomoku
                     {
                         if (x >= 0 && x < 15 && y >= 0 && y < 15)
                         {
+                            if (this.game.WhoToMove == 1)
+                            {
+                                this.game.Chess[x, y] = 1;
+                                int f = this.forbidden.forbidden(x, y);
+                                this.game.Chess[x, y] = 0;
+
+                                if (f != 0)
+                                {
+                                    DialogResult dialogResult = DialogResult.Yes;
+                                    switch (f)
+                                    {
+                                        case 1:
+                                            dialogResult = MessageBox.Show("三三禁手!!!是否撤回该步？", "FORBIDDEN", MessageBoxButtons.YesNo);
+                                            break;
+                                        case 2:
+                                            dialogResult = MessageBox.Show("四四禁手!!!是否撤回该步？", "FORBIDDEN", MessageBoxButtons.YesNo);
+                                            break;
+                                        case 3:
+                                            dialogResult = MessageBox.Show("长连禁手!!!是否撤回该步？", "FORBIDDEN", MessageBoxButtons.YesNo);
+                                            break;
+                                    }
+
+                                    if (dialogResult == DialogResult.Yes)
+                                    {
+                                        this.game.AllowToMove = true;
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("WHITE WIN!!!", "WIN");
+                                        this.game.Start = false;
+                                        return;
+                                    }
+                                }
+                            }
+
                             this.game.BlackTimeThis = 0;
                             this.game.WhiteTimeThis = 0;
                             this.black_time_this.Text = "步时: 0秒";
