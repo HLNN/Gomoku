@@ -165,7 +165,6 @@ namespace Gomoku
                 j--;
             }
             
-            // MessageBox.Show(Convert.ToString(henghuo3) + " " + Convert.ToString(shuhuo3) + " " + Convert.ToString(zuoxiehuo3) + " " + Convert.ToString(youxiehuo3));
             return henghuo3 + shuhuo3 + zuoxiehuo3 + youxiehuo3;
         }
 
@@ -349,9 +348,7 @@ namespace Gomoku
                 i++;
                 j--;
             }
-
-
-            // MessageBox.Show(Convert.ToString(heng4) + " " + Convert.ToString(shu4) + " " + Convert.ToString(zuoxie4) + " " + Convert.ToString(youxie4));
+            
             return heng4 + shu4 + zuoxie4 + youxie4;
         }
 
@@ -432,9 +429,7 @@ namespace Gomoku
                 i++;
                 j--;
             }
-
-
-            // MessageBox.Show(Convert.ToString(heng6) + " " + Convert.ToString(shu6) + " " + Convert.ToString(zuoxie6) + " " + Convert.ToString(youxie6));
+            
             return heng6 + shu6 + zuoxie6 + youxie6;
         }
 
@@ -447,17 +442,17 @@ namespace Gomoku
             //禁手触发
             if (huosan() >= 2)
             {
-                MessageBox.Show("双活三禁手！若不悔棋则棋手1负！");
+                // MessageBox.Show("双活三禁手！若不悔棋则棋手1负！");
                 return 1;
             }
             if (si() >= 2)
             {
-                MessageBox.Show("双四禁手！若不悔棋则棋手1负！");
+                // MessageBox.Show("双四禁手！若不悔棋则棋手1负！");
                 return 2;
             }
             if (liu() > 0)
             {
-                MessageBox.Show("长连禁手！若不悔棋则棋手1负！");
+                // MessageBox.Show("长连禁手！若不悔棋则棋手1负！");
                 return 3;
             }
 
