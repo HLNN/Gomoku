@@ -8,6 +8,8 @@ namespace Gomoku
 {
     class AI : AIInterface
     {
+        Forbidden forbidden = new Forbidden();
+
         static int[] dx = { 0, 1, 1, 1 };
         static int[] dy = { 1, -1, 0, 1 };
         static int size = 15;
@@ -156,6 +158,15 @@ namespace Gomoku
                         if (level[i, j] > 0 && level[i, j] < bestLevel)
                         {
                             bestLevel = level[i, j];
+
+                            board[i, j] = 1;
+                            int f = forbidden.forbidden(board, i, j);
+                            board[i, j] = 0;
+                            if (f > 0)
+                            {
+                                continue;
+                            }
+
                             x = i;
                             y = j;
                         }
@@ -163,6 +174,15 @@ namespace Gomoku
                         if (bestLevel == 1000 && score[i, j] > maxScore)
                         {
                             maxScore = score[i, j];
+
+                            board[i, j] = 1;
+                            int f = forbidden.forbidden(board, i, j);
+                            board[i, j] = 0;
+                            if (f > 0)
+                            {
+                                continue;
+                            }
+
                             x = i;
                             y = j;
                         }
