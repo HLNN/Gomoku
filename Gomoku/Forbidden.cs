@@ -9,15 +9,10 @@ namespace Gomoku
 {
     class Forbidden
     {
-        Game game;
+        int[,] board;
         int x, y;
         int i, j;
-
-        public Forbidden(Game g)
-        {
-            this.game = g;
-        }
-
+        
         public int huosan()
         {
             //横活三
@@ -26,28 +21,28 @@ namespace Gomoku
             j = 0;
             for (j = 0; j <= 9; j++)
             {
-                if (game.Chess[x, j] == 0 && game.Chess[x, j + 5] == 0)
+                if (board[x, j] == 0 && board[x, j + 5] == 0)
                 {
-                    if (game.Chess[x, j + 1] == 1 && game.Chess[x, j + 2] == 1 && game.Chess[x, j + 3] == 1 &&
-                        game.Chess[x, j + 4] == 0 && (y == j + 1 || y == j + 2 || y == j + 3))
+                    if (board[x, j + 1] == 1 && board[x, j + 2] == 1 && board[x, j + 3] == 1 &&
+                        board[x, j + 4] == 0 && (y == j + 1 || y == j + 2 || y == j + 3))
                     {
                         henghuo3 = 1;
                     }
 
-                    if (game.Chess[x, j + 1] == 1 && game.Chess[x, j + 2] == 1 && game.Chess[x, j + 4] == 1 &&
-                        game.Chess[x, j + 3] == 0 && (y == j + 1 || y == j + 2 || y == j + 4))
+                    if (board[x, j + 1] == 1 && board[x, j + 2] == 1 && board[x, j + 4] == 1 &&
+                        board[x, j + 3] == 0 && (y == j + 1 || y == j + 2 || y == j + 4))
                     {
                         henghuo3 = 1;
                     }
 
-                    if (game.Chess[x, j + 1] == 1 && game.Chess[x, j + 3] == 1 && game.Chess[x, j + 4] == 1 &&
-                        game.Chess[x, j + 2] == 0 && (y == j + 1 || y == j + 3 || y == j + 4))
+                    if (board[x, j + 1] == 1 && board[x, j + 3] == 1 && board[x, j + 4] == 1 &&
+                        board[x, j + 2] == 0 && (y == j + 1 || y == j + 3 || y == j + 4))
                     {
                         henghuo3 = 1;
                     }
 
-                    if (game.Chess[x, j + 2] == 1 && game.Chess[x, j + 3] == 1 && game.Chess[x, j + 4] == 1 &&
-                        game.Chess[x, j + 1] == 0 && (y == j + 2 || y == j + 3 || y == j + 4))
+                    if (board[x, j + 2] == 1 && board[x, j + 3] == 1 && board[x, j + 4] == 1 &&
+                        board[x, j + 1] == 0 && (y == j + 2 || y == j + 3 || y == j + 4))
                     {
                         henghuo3 = 1;
                     }
@@ -60,28 +55,28 @@ namespace Gomoku
             j = 0;
             for (i = 0; i <= 9; i++)
             {
-                if (game.Chess[i, y] == 0 && game.Chess[i + 5, y] == 0)
+                if (board[i, y] == 0 && board[i + 5, y] == 0)
                 {
-                    if (game.Chess[i + 1, y] == 1 && game.Chess[i + 2, y] == 1 && game.Chess[i + 3, y] == 1 &&
-                        game.Chess[i + 4, y] == 0 && (x == i + 1 || x == i + 2 || x == i + 3))
+                    if (board[i + 1, y] == 1 && board[i + 2, y] == 1 && board[i + 3, y] == 1 &&
+                        board[i + 4, y] == 0 && (x == i + 1 || x == i + 2 || x == i + 3))
                     {
                         shuhuo3 = 1;
                     }
 
-                    if (game.Chess[i + 1, y] == 1 && game.Chess[i + 2, y] == 1 && game.Chess[i + 4, y] == 1 &&
-                        game.Chess[i + 3, y] == 0 && (x == i + 1 || x == i + 2 || x == i + 4))
+                    if (board[i + 1, y] == 1 && board[i + 2, y] == 1 && board[i + 4, y] == 1 &&
+                        board[i + 3, y] == 0 && (x == i + 1 || x == i + 2 || x == i + 4))
                     {
                         shuhuo3 = 1;
                     }
 
-                    if (game.Chess[i + 1, y] == 1 && game.Chess[i + 3, y] == 1 && game.Chess[i + 4, y] == 1 &&
-                        game.Chess[i + 2, y] == 0 && (x == i + 1 || x == i + 3 || x == i + 4))
+                    if (board[i + 1, y] == 1 && board[i + 3, y] == 1 && board[i + 4, y] == 1 &&
+                        board[i + 2, y] == 0 && (x == i + 1 || x == i + 3 || x == i + 4))
                     {
                         shuhuo3 = 1;
                     }
 
-                    if (game.Chess[i + 2, y] == 1 && game.Chess[i + 3, y] == 1 && game.Chess[i + 4, y] == 1 &&
-                        game.Chess[i + 1, y] == 0 && (x == i + 2 || x == i + 3 || x == i + 4))
+                    if (board[i + 2, y] == 1 && board[i + 3, y] == 1 && board[i + 4, y] == 1 &&
+                        board[i + 1, y] == 0 && (x == i + 2 || x == i + 3 || x == i + 4))
                     {
                         shuhuo3 = 1;
                     }
@@ -94,31 +89,31 @@ namespace Gomoku
             j = y - Math.Min(x, y);
             while (i <= 9 && j <= 9)
             {
-                if (game.Chess[i, j] == 0 && game.Chess[i + 5, j + 5] == 0)
+                if (board[i, j] == 0 && board[i + 5, j + 5] == 0)
                 {
-                    if (game.Chess[i + 1, j + 1] == 1 && game.Chess[i + 2, j + 2] == 1 && game.Chess[i + 3, j + 3] == 1 &&
-                        game.Chess[i + 4, j + 4] == 0 &&
+                    if (board[i + 1, j + 1] == 1 && board[i + 2, j + 2] == 1 && board[i + 3, j + 3] == 1 &&
+                        board[i + 4, j + 4] == 0 &&
                         (x == i + 1 && y == j + 1 || x == i + 2 && y == j + 2 || x == i + 3 && y == j + 3))
                     {
                         zuoxiehuo3 = 1;
                     }
 
-                    if (game.Chess[i + 1, j + 1] == 1 && game.Chess[i + 2, j + 2] == 1 && game.Chess[i + 4, j + 4] == 1 &&
-                        game.Chess[i + 3, j + 3] == 0 &&
+                    if (board[i + 1, j + 1] == 1 && board[i + 2, j + 2] == 1 && board[i + 4, j + 4] == 1 &&
+                        board[i + 3, j + 3] == 0 &&
                         (x == i + 1 && y == j + 1 || x == i + 2 && y == j + 2 || x == i + 4 && y == j + 4))
                     {
                         zuoxiehuo3 = 1;
                     }
 
-                    if (game.Chess[i + 1, j + 1] == 1 && game.Chess[i + 3, j + 3] == 1 && game.Chess[i + 4, j + 4] == 1 &&
-                        game.Chess[i + 2, j + 2] == 0 &&
+                    if (board[i + 1, j + 1] == 1 && board[i + 3, j + 3] == 1 && board[i + 4, j + 4] == 1 &&
+                        board[i + 2, j + 2] == 0 &&
                         (x == i + 1 && y == j + 1 || x == i + 3 && y == j + 3 || x == i + 4 && y == j + 4))
                     {
                         zuoxiehuo3 = 1;
                     }
 
-                    if (game.Chess[i + 2, j + 2] == 1 && game.Chess[i + 3, j + 3] == 1 && game.Chess[i + 4, j + 4] == 1 &&
-                        game.Chess[i + 1, j + 1] == 0 &&
+                    if (board[i + 2, j + 2] == 1 && board[i + 3, j + 3] == 1 && board[i + 4, j + 4] == 1 &&
+                        board[i + 1, j + 1] == 0 &&
                         (x == i + 2 && y == j + 2 || x == i + 3 && y == j + 3 || x == i + 4 && y == j + 4))
                     {
                         zuoxiehuo3 = 1;
@@ -135,31 +130,31 @@ namespace Gomoku
             j = y + Math.Min(x, 14 - y);
             while (i <= 9 && j >= 5)
             {
-                if (game.Chess[i, j] == 0 && game.Chess[i + 5, j - 5] == 0)
+                if (board[i, j] == 0 && board[i + 5, j - 5] == 0)
                 {
-                    if (game.Chess[i + 1, j - 1] == 1 && game.Chess[i + 2, j - 2] == 1 && game.Chess[i + 3, j - 3] == 1 &&
-                        game.Chess[i + 4, j - 4] == 0 &&
+                    if (board[i + 1, j - 1] == 1 && board[i + 2, j - 2] == 1 && board[i + 3, j - 3] == 1 &&
+                        board[i + 4, j - 4] == 0 &&
                         (x == i + 1 && y == j - 1 || x == i + 2 && y == j - 2 || x == i + 3 && y == j - 3))
                     {
                         youxiehuo3 = 1;
                     }
 
-                    if (game.Chess[i + 1, j - 1] == 1 && game.Chess[i + 2, j - 2] == 1 && game.Chess[i + 4, j - 4] == 1 &&
-                        game.Chess[i + 3, j - 3] == 0 &&
+                    if (board[i + 1, j - 1] == 1 && board[i + 2, j - 2] == 1 && board[i + 4, j - 4] == 1 &&
+                        board[i + 3, j - 3] == 0 &&
                         (x == i + 1 && y == j - 1 || x == i + 2 && y == j - 2 || x == i + 4 && y == j - 4))
                     {
                         youxiehuo3 = 1;
                     }
 
-                    if (game.Chess[i + 1, j - 1] == 1 && game.Chess[i + 3, j - 3] == 1 && game.Chess[i + 4, j - 4] == 1 &&
-                        game.Chess[i + 2, j - 2] == 0 &&
+                    if (board[i + 1, j - 1] == 1 && board[i + 3, j - 3] == 1 && board[i + 4, j - 4] == 1 &&
+                        board[i + 2, j - 2] == 0 &&
                         (x == i + 1 && y == j - 1 || x == i + 3 && y == j - 3 || x == i + 4 && y == j - 4))
                     {
                         youxiehuo3 = 1;
                     }
 
-                    if (game.Chess[i + 2, j - 2] == 1 && game.Chess[i + 3, j - 3] == 1 && game.Chess[i + 4, j - 4] == 1 &&
-                        game.Chess[i + 1, j - 1] == 0 &&
+                    if (board[i + 2, j - 2] == 1 && board[i + 3, j - 3] == 1 && board[i + 4, j - 4] == 1 &&
+                        board[i + 1, j - 1] == 0 &&
                         (x == i + 2 && y == j - 2 || x == i + 3 && y == j - 3 || x == i + 4 && y == j - 4))
                     {
                         youxiehuo3 = 1;
@@ -184,35 +179,35 @@ namespace Gomoku
             {
                 if (y == j || y == j + 1 || y == j + 2 || y == j + 3 || y == j + 4)
                 {
-                    if (game.Chess[x, j] == 1 && game.Chess[x, j + 1] == 1 &&
-                        game.Chess[x, j + 2] == 1 && game.Chess[x, j + 3] == 1)
+                    if (board[x, j] == 1 && board[x, j + 1] == 1 &&
+                        board[x, j + 2] == 1 && board[x, j + 3] == 1)
                     {
                         heng4 = 1;
                     }
 
-                    if (game.Chess[x, j] == 1 &&
-                        game.Chess[x, j + 1] == 0 && game.Chess[x, j + 2] == 1 &&
-                        game.Chess[x, j + 3] == 1 && game.Chess[x, j + 4] == 1)
+                    if (board[x, j] == 1 &&
+                        board[x, j + 1] == 0 && board[x, j + 2] == 1 &&
+                        board[x, j + 3] == 1 && board[x, j + 4] == 1)
                     {
                         heng4 = 1;
                     }
 
-                    if (game.Chess[x, j] == 1 &&
-                        game.Chess[x, j + 1] == 1 && game.Chess[x, j + 2] == 0 &&
-                        game.Chess[x, j + 3] == 1 && game.Chess[x, j + 4] == 1)
+                    if (board[x, j] == 1 &&
+                        board[x, j + 1] == 1 && board[x, j + 2] == 0 &&
+                        board[x, j + 3] == 1 && board[x, j + 4] == 1)
                     {
                         heng4 = 1;
                     }
 
-                    if (game.Chess[x, j] == 1 &&
-                        game.Chess[x, j + 1] == 1 && game.Chess[x, j + 2] == 1 &&
-                        game.Chess[x, j + 3] == 0 && game.Chess[x, j + 4] == 1)
+                    if (board[x, j] == 1 &&
+                        board[x, j + 1] == 1 && board[x, j + 2] == 1 &&
+                        board[x, j + 3] == 0 && board[x, j + 4] == 1)
                     {
                         heng4 = 1;
                     }
 
-                    if (game.Chess[x, j + 1] == 1 && game.Chess[x, j + 2] == 1 &&
-                        game.Chess[x, j + 3] == 1 && game.Chess[x, j + 4] == 1)
+                    if (board[x, j + 1] == 1 && board[x, j + 2] == 1 &&
+                        board[x, j + 3] == 1 && board[x, j + 4] == 1)
                     {
                         heng4 = 1;
                     }
@@ -227,35 +222,35 @@ namespace Gomoku
             {
                 if (x == i || x == i + 1 || x == i + 2 || x == i + 3 || x == i + 4)
                 {
-                    if (game.Chess[i, y] == 1 && game.Chess[i + 1, y] == 1 &&
-                        game.Chess[i + 2, y] == 1 && game.Chess[i + 3, y] == 1)
+                    if (board[i, y] == 1 && board[i + 1, y] == 1 &&
+                        board[i + 2, y] == 1 && board[i + 3, y] == 1)
                     {
                         shu4 = 1;
                     }
 
-                    if (game.Chess[i, y] == 1 &&
-                        game.Chess[i + 1, y] == 0 && game.Chess[i + 2, y] == 1 &&
-                        game.Chess[i + 3, y] == 1 && game.Chess[i + 4, y] == 1)
+                    if (board[i, y] == 1 &&
+                        board[i + 1, y] == 0 && board[i + 2, y] == 1 &&
+                        board[i + 3, y] == 1 && board[i + 4, y] == 1)
                     {
                         shu4 = 1;
                     }
 
-                    if (game.Chess[i, y] == 1 &&
-                        game.Chess[i + 1, y] == 1 && game.Chess[i + 2, y] == 0 &&
-                        game.Chess[i + 3, y] == 1 && game.Chess[i + 4, y] == 1)
+                    if (board[i, y] == 1 &&
+                        board[i + 1, y] == 1 && board[i + 2, y] == 0 &&
+                        board[i + 3, y] == 1 && board[i + 4, y] == 1)
                     {
                         shu4 = 1;
                     }
 
-                    if (game.Chess[i, y] == 1 &&
-                        game.Chess[i + 1, y] == 1 && game.Chess[i + 2, y] == 1 &&
-                        game.Chess[i + 3, y] == 0 && game.Chess[i + 4, y] == 1)
+                    if (board[i, y] == 1 &&
+                        board[i + 1, y] == 1 && board[i + 2, y] == 1 &&
+                        board[i + 3, y] == 0 && board[i + 4, y] == 1)
                     {
                         shu4 = 1;
                     }
 
-                    if (game.Chess[i + 1, y] == 1 && game.Chess[i + 2, y] == 1 &&
-                        game.Chess[i + 3, y] == 1 && game.Chess[i + 4, y] == 1)
+                    if (board[i + 1, y] == 1 && board[i + 2, y] == 1 &&
+                        board[i + 3, y] == 1 && board[i + 4, y] == 1)
                     {
                         shu4 = 1;
                     }
@@ -271,35 +266,35 @@ namespace Gomoku
                 if (x == i && y == j || x == i + 1 && y == j + 1 || x == i + 2 && y == j + 2 || 
                     x == i + 3 && y == j + 3 || x == i + 4 && y == j + 4)
                 {
-                    if (game.Chess[i, j] == 1 && game.Chess[i + 1, j + 1] == 1 &&
-                        game.Chess[i + 2, j + 2] == 1 && game.Chess[i + 3, j + 3] == 1)
+                    if (board[i, j] == 1 && board[i + 1, j + 1] == 1 &&
+                        board[i + 2, j + 2] == 1 && board[i + 3, j + 3] == 1)
                     {
                         zuoxie4 = 1;
                     }
 
-                    if (game.Chess[i, j] == 1 &&
-                        game.Chess[i + 1, j + 1] == 0 && game.Chess[i + 2, j + 2] == 1 &&
-                        game.Chess[i + 3, j + 3] == 1 && game.Chess[i + 4, j + 4] == 1)
+                    if (board[i, j] == 1 &&
+                        board[i + 1, j + 1] == 0 && board[i + 2, j + 2] == 1 &&
+                        board[i + 3, j + 3] == 1 && board[i + 4, j + 4] == 1)
                     {
                         zuoxie4 = 1;
                     }
 
-                    if (game.Chess[i, j] == 1 &&
-                        game.Chess[i + 1, j + 1] == 1 && game.Chess[i + 2, j + 2] == 0 &&
-                        game.Chess[i + 3, j + 3] == 1 && game.Chess[i + 4, j + 4] == 1)
+                    if (board[i, j] == 1 &&
+                        board[i + 1, j + 1] == 1 && board[i + 2, j + 2] == 0 &&
+                        board[i + 3, j + 3] == 1 && board[i + 4, j + 4] == 1)
                     {
                         zuoxie4 = 1;
                     }
 
-                    if (game.Chess[i, j] == 1 &&
-                        game.Chess[i + 1, j + 1] == 1 && game.Chess[i + 2, j + 2] == 1 &&
-                        game.Chess[i + 3, j + 3] == 0 && game.Chess[i + 4, j + 4] == 1)
+                    if (board[i, j] == 1 &&
+                        board[i + 1, j + 1] == 1 && board[i + 2, j + 2] == 1 &&
+                        board[i + 3, j + 3] == 0 && board[i + 4, j + 4] == 1)
                     {
                         zuoxie4 = 1;
                     }
 
-                    if (game.Chess[i + 1, j + 1] == 1 && game.Chess[i + 2, j + 2] == 1 &&
-                        game.Chess[i + 3, j + 3] == 1 && game.Chess[i + 4, j + 4] == 1)
+                    if (board[i + 1, j + 1] == 1 && board[i + 2, j + 2] == 1 &&
+                        board[i + 3, j + 3] == 1 && board[i + 4, j + 4] == 1)
                     {
                         zuoxie4 = 1;
                     }
@@ -317,35 +312,35 @@ namespace Gomoku
             {
                 if (x == i && y == j || x == i + 1 && y == j - 1 || x == i + 2 && y == j - 2 || x == i + 3 && y == j - 3 || x == i + 4 && y == j - 4)
                 {
-                    if (game.Chess[i, j] == 1 && game.Chess[i + 1, j - 1] == 1 &&
-                        game.Chess[i + 2, j - 2] == 1 && game.Chess[i + 3, j - 3] == 1)
+                    if (board[i, j] == 1 && board[i + 1, j - 1] == 1 &&
+                        board[i + 2, j - 2] == 1 && board[i + 3, j - 3] == 1)
                     {
                         youxie4 = 1;
                     }
 
-                    if (game.Chess[i, j] == 1 &&
-                        game.Chess[i + 1, j - 1] == 0 && game.Chess[i + 2, j - 2] == 1 &&
-                        game.Chess[i + 3, j - 3] == 1 && game.Chess[i + 4, j - 4] == 1)
+                    if (board[i, j] == 1 &&
+                        board[i + 1, j - 1] == 0 && board[i + 2, j - 2] == 1 &&
+                        board[i + 3, j - 3] == 1 && board[i + 4, j - 4] == 1)
                     {
                         youxie4 = 1;
                     }
 
-                    if (game.Chess[i, j] == 1 &&
-                        game.Chess[i + 1, j - 1] == 1 && game.Chess[i + 2, j - 2] == 0 &&
-                        game.Chess[i + 3, j - 3] == 1 && game.Chess[i + 4, j - 4] == 1)
+                    if (board[i, j] == 1 &&
+                        board[i + 1, j - 1] == 1 && board[i + 2, j - 2] == 0 &&
+                        board[i + 3, j - 3] == 1 && board[i + 4, j - 4] == 1)
                     {
                         youxie4 = 1;
                     }
 
-                    if (game.Chess[i, j] == 1 &&
-                        game.Chess[i + 1, j - 1] == 1 && game.Chess[i + 2, j - 2] == 1 &&
-                        game.Chess[i + 3, j - 3] == 0 && game.Chess[i + 4, j - 4] == 1)
+                    if (board[i, j] == 1 &&
+                        board[i + 1, j - 1] == 1 && board[i + 2, j - 2] == 1 &&
+                        board[i + 3, j - 3] == 0 && board[i + 4, j - 4] == 1)
                     {
                         youxie4 = 1;
                     }
 
-                    if (game.Chess[i + 1, j - 1] == 1 && game.Chess[i + 2, j - 2] == 1 &&
-                        game.Chess[i + 3, j - 3] == 1 && game.Chess[i + 4, j - 4] == 1)
+                    if (board[i + 1, j - 1] == 1 && board[i + 2, j - 2] == 1 &&
+                        board[i + 3, j - 3] == 1 && board[i + 4, j - 4] == 1)
                     {
                         youxie4 = 1;
                     }
@@ -370,9 +365,9 @@ namespace Gomoku
             {
                 if (y == j || y == j + 1 || y == j + 2 || y == j + 3 || y == j + 4 || y == j + 5)
                 {
-                    if (game.Chess[x, j] == 1 && game.Chess[x, j + 1] == 1 && 
-                        game.Chess[x, j + 2] == 1 && game.Chess[x, j + 3] == 1 &&
-                        game.Chess[x, j + 4] == 1 && game.Chess[x, j + 5] == 1)
+                    if (board[x, j] == 1 && board[x, j + 1] == 1 && 
+                        board[x, j + 2] == 1 && board[x, j + 3] == 1 &&
+                        board[x, j + 4] == 1 && board[x, j + 5] == 1)
                     {
                         heng6 = 1;
                     }
@@ -387,9 +382,9 @@ namespace Gomoku
             {
                 if (x == i || x == i + 1 || x == i + 2 || x == i + 3 || x == i + 4 || x == i + 5)
                 {
-                    if (game.Chess[i, y] == 1 && game.Chess[i + 1, y] == 1 &&
-                        game.Chess[i + 2, y] == 1 && game.Chess[i + 3, y] == 1 &&
-                        game.Chess[i + 4, y] == 1 && game.Chess[i + 5, y] == 1)
+                    if (board[i, y] == 1 && board[i + 1, y] == 1 &&
+                        board[i + 2, y] == 1 && board[i + 3, y] == 1 &&
+                        board[i + 4, y] == 1 && board[i + 5, y] == 1)
                     {
                         shu6 = 1;
                     }
@@ -405,9 +400,9 @@ namespace Gomoku
                 if (x == i && y == j || x == i + 1 && y == j + 1 || x == i + 2 && y == j + 2 ||
                     x == i + 3 && y == j + 3 || x == i + 4 && y == j + 4 || x == i + 5 && y == j + 5)
                 {
-                    if (game.Chess[i, j] == 1 && game.Chess[i + 1, j + 1] == 1 &&
-                        game.Chess[i + 2, j + 2] == 1 && game.Chess[i + 3, j + 3] == 1 &&
-                        game.Chess[i + 4, j + 4] == 1 && game.Chess[i + 5, j + 5] == 1)
+                    if (board[i, j] == 1 && board[i + 1, j + 1] == 1 &&
+                        board[i + 2, j + 2] == 1 && board[i + 3, j + 3] == 1 &&
+                        board[i + 4, j + 4] == 1 && board[i + 5, j + 5] == 1)
                     {
                         zuoxie6 = 1;
                     }
@@ -426,9 +421,9 @@ namespace Gomoku
                 if (x == i && y == j || x == i + 1 && y == j + 1 || x == i + 2 && y == j + 2 ||
                     x == i + 3 && y == j + 3 || x == i + 4 && y == j + 4 || x == i + 5 && y == j + 5)
                 {
-                    if (game.Chess[i, j] == 1 && game.Chess[i + 1, j - 1] == 1 &&
-                        game.Chess[i + 2, j - 2] == 1 && game.Chess[i + 3, j - 3] == 1 &&
-                        game.Chess[i + 4, j - 4] == 1 && game.Chess[i + 5, j - 5] == 1)
+                    if (board[i, j] == 1 && board[i + 1, j - 1] == 1 &&
+                        board[i + 2, j - 2] == 1 && board[i + 3, j - 3] == 1 &&
+                        board[i + 4, j - 4] == 1 && board[i + 5, j - 5] == 1)
                     {
                         youxie6 = 1;
                     }
@@ -443,10 +438,11 @@ namespace Gomoku
             return heng6 + shu6 + zuoxie6 + youxie6;
         }
 
-        public int forbidden(int _x, int _y)
+        public int forbidden(int[,] b, int _x, int _y)
         {
-            this.x = _x;
-            this.y = _y;
+            board = b;
+            x = _x;
+            y = _y;
 
             //禁手触发
             if (huosan() >= 2)

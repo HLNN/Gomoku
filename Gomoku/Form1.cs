@@ -32,52 +32,51 @@ namespace Gomoku
         public Gomoku()
         {
             InitializeComponent();
-            this.Width = MainSize.Wid;
-            this.Height = MainSize.Hei;
-            this.ChessBox.Width = MainSize.CBWid;
-            this.ChessBox.Height = MainSize.CBHei;
+            Width = MainSize.Wid;
+            Height = MainSize.Hei;
+            ChessBox.Width = MainSize.CBWid;
+            ChessBox.Height = MainSize.CBHei;
         }
 
         private void Gomoku_Load(object sender, EventArgs e)
         {
-            global::Gomoku.ChessBoard.DrawCB(this, graphic, this.ChessBoard);
+            global::Gomoku.ChessBoard.DrawCB(this, graphic, ChessBoard);
         }
 
         private void restart_for_new_game()
         {
-            this.game = new Game();
-            this.forbidden = new Forbidden(this.game);
-            global::Gomoku.ChessBoard.DrawCB(this, graphic, this.ChessBoard);
+            game = new Game();
+            forbidden = new Forbidden();
+            global::Gomoku.ChessBoard.DrawCB(this, graphic, ChessBoard);
 
-            this.timer1.Enabled = false;
-            this.black_time_all.Text = "局时: 0秒";
-            this.black_time_this.Text = "步时: 0秒";
-            this.white_time_all.Text = "局时: 0秒";
-            this.white_time_this.Text = "步时: 0秒";
+            timer1.Enabled = false;
+            black_time_all.Text = "局时: 0秒";
+            black_time_this.Text = "步时: 0秒";
+            white_time_all.Text = "局时: 0秒";
+            white_time_this.Text = "步时: 0秒";
         }
 
         private void ai_move()
         {
-            int x, y;
-            ai.Running(this.game.Chess, this.game.WhoToMove);
-            ai.GetNextStep(out x, out y);
+            ai.Running(game.Chess, game.WhoToMove);
+            ai.GetNextStep(out int x, out int y);
 
-            if (x < 0 || x > 14 || y < 0 || y > 14 || this.game.Chess[x, y] != 0)
+            if (x < 0 || x > 14 || y < 0 || y > 14 || game.Chess[x, y] != 0)
             {
                 // AI lose
             }
 
 
-            this.game.BlackTimeThis = 0;
-            this.game.WhiteTimeThis = 0;
-            this.black_time_this.Text = "步时: 0秒";
-            this.white_time_this.Text = "步时: 0秒";
+            game.BlackTimeThis = 0;
+            game.WhiteTimeThis = 0;
+            black_time_this.Text = "步时: 0秒";
+            white_time_this.Text = "步时: 0秒";
 
-            this.game.Move(x, y);
+            game.Move(x, y);
 
-            Image img = this.ChessBoard.Image;
+            Image img = ChessBoard.Image;
             Graphics gra = Graphics.FromImage(img);
-            switch (this.game.WhoToMove)
+            switch (game.WhoToMove)
             {
                 case 1:
                     gra.FillEllipse(blackBrush, x * 50 + 15, y * 50 + 15, 30, 30);
@@ -86,95 +85,96 @@ namespace Gomoku
                     gra.FillEllipse(whiteBrush, x * 50 + 15, y * 50 + 15, 30, 30);
                     break;
             }
-            this.ChessBoard.Image = img;
+            ChessBoard.Image = img;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (this.game.Review)
+            Gomoku gomoku = this;
+            if (game.Review)
             {
                 Ticks++;
                 bool moveFlag = false;
 
-                while(this.game.Moves[this.game.Steps, 1] < Ticks * 1000)
+                while(game.Moves[game.Steps, 1] < Ticks * 1000)
                 {
-                    if (this.game.Moves[this.game.Steps, 0] == 0)
+                    if (game.Moves[game.Steps, 0] == 0)
                     {
-                        this.game.Review = false;
-                        this.game.AllowToMove = this.game.OldAllowToMove;
-                        this.check_win();
+                        game.Review = false;
+                        game.AllowToMove = game.OldAllowToMove;
+                        check_win();
                         return;
                     }
 
-                    Image img = this.ChessBoard.Image;
+                    Image img = ChessBoard.Image;
                     Graphics gra = Graphics.FromImage(img);
-                    switch (this.game.Moves[this.game.Steps, 0])
+                    switch (game.Moves[game.Steps, 0])
                     {
                         case 1:
-                            gra.FillEllipse(blackBrush, this.game.Moves[this.game.Steps, 2] * 50 + 15, this.game.Moves[this.game.Steps, 3] * 50 + 15, 30, 30);
+                            gra.FillEllipse(blackBrush, game.Moves[game.Steps, 2] * 50 + 15, game.Moves[game.Steps, 3] * 50 + 15, 30, 30);
                             break;
                         case 2:
-                            gra.FillEllipse(whiteBrush, this.game.Moves[this.game.Steps, 2] * 50 + 15, this.game.Moves[this.game.Steps, 3] * 50 + 15, 30, 30);
+                            gra.FillEllipse(whiteBrush, game.Moves[game.Steps, 2] * 50 + 15, game.Moves[game.Steps, 3] * 50 + 15, 30, 30);
                             break;
                     }
-                    this.ChessBoard.Image = img;
+                    ChessBoard.Image = img;
 
-                    this.game.BlackTime = this.game.Moves[this.game.Steps, 4];
-                    this.game.WhiteTime = this.game.Moves[this.game.Steps, 5];
-                    this.game.BlackTimeThis = 0;
-                    this.game.WhiteTimeThis = 0;
-                    this.white_time_all.Text = "局时: " + Convert.ToString(this.game.WhiteTime) + "秒";
-                    this.white_time_this.Text = "步时: " + Convert.ToString(this.game.WhiteTimeThis) + "秒";
-                    this.black_time_all.Text = "局时: " + Convert.ToString(this.game.BlackTime) + "秒";
-                    this.black_time_this.Text = "步时: " + Convert.ToString(this.game.BlackTimeThis) + "秒";
+                    game.BlackTime = game.Moves[game.Steps, 4];
+                    game.WhiteTime = game.Moves[game.Steps, 5];
+                    game.BlackTimeThis = 0;
+                    game.WhiteTimeThis = 0;
+                    white_time_all.Text = "局时: " + Convert.ToString(game.WhiteTime) + "秒";
+                    white_time_this.Text = "步时: " + Convert.ToString(game.WhiteTimeThis) + "秒";
+                    black_time_all.Text = "局时: " + Convert.ToString(game.BlackTime) + "秒";
+                    black_time_this.Text = "步时: " + Convert.ToString(game.BlackTimeThis) + "秒";
 
                     moveFlag = true;
-                    this.game.Steps++;
+                    game.Steps++;
                 }
 
                 if (!moveFlag)
                 {
-                    switch (this.game.Moves[this.game.Steps, 0])
+                    switch (game.Moves[game.Steps, 0])
                     {
                         case 1:
-                            this.game.BlackTime++;
-                            this.game.BlackTimeThis++;
-                            this.black_time_all.Text = "局时: " + Convert.ToString(this.game.BlackTime) + "秒";
-                            this.black_time_this.Text = "步时: " + Convert.ToString(this.game.BlackTimeThis) + "秒";
+                            game.BlackTime++;
+                            game.BlackTimeThis++;
+                            black_time_all.Text = "局时: " + Convert.ToString(game.BlackTime) + "秒";
+                            black_time_this.Text = "步时: " + Convert.ToString(game.BlackTimeThis) + "秒";
                             break;
                         case 2:
-                            this.game.WhiteTime++;
-                            this.game.WhiteTimeThis++;
-                            this.white_time_all.Text = "局时: " + Convert.ToString(this.game.WhiteTime) + "秒";
-                            this.white_time_this.Text = "步时: " + Convert.ToString(this.game.WhiteTimeThis) + "秒";
+                            game.WhiteTime++;
+                            game.WhiteTimeThis++;
+                            gomoku.white_time_all.Text = "局时: " + Convert.ToString(gomoku.game.WhiteTime) + "秒";
+                            gomoku.white_time_this.Text = "步时: " + Convert.ToString(gomoku.game.WhiteTimeThis) + "秒";
                             break;
                     }
                 }
             }
-            else if (this.game.Start)
+            else if (gomoku.game.Start)
             {
-                switch (this.game.WhoToMove)
+                switch (gomoku.game.WhoToMove)
                 {
                     case 1:
-                        this.game.BlackTime++;
-                        this.game.BlackTimeThis++;
+                        gomoku.game.BlackTime++;
+                        gomoku.game.BlackTimeThis++;
 
-                        this.black_time_all.Text = "局时: " + Convert.ToString(this.game.BlackTime) + "秒";
-                        this.black_time_this.Text = "步时: " + Convert.ToString(this.game.BlackTimeThis) + "秒";
+                        gomoku.black_time_all.Text = "局时: " + Convert.ToString(gomoku.game.BlackTime) + "秒";
+                        gomoku.black_time_this.Text = "步时: " + Convert.ToString(gomoku.game.BlackTimeThis) + "秒";
 
-                        if (this.game.BlackTimeThis >= 15)
+                        if (gomoku.game.BlackTimeThis >= 15)
                         {
 
                         }
                         break;
                     case 2:
-                        this.game.WhiteTime++;
-                        this.game.WhiteTimeThis++;
+                        gomoku.game.WhiteTime++;
+                        gomoku.game.WhiteTimeThis++;
 
-                        this.white_time_all.Text = "局时: " + Convert.ToString(this.game.WhiteTime) + "秒";
-                        this.white_time_this.Text = "步时: " + Convert.ToString(this.game.WhiteTimeThis) + "秒";
+                        gomoku.white_time_all.Text = "局时: " + Convert.ToString(gomoku.game.WhiteTime) + "秒";
+                        gomoku.white_time_this.Text = "步时: " + Convert.ToString(gomoku.game.WhiteTimeThis) + "秒";
 
-                        if (this.game.WhiteTimeThis >= 15)
+                        if (gomoku.game.WhiteTimeThis >= 15)
                         {
 
                         }
@@ -186,7 +186,7 @@ namespace Gomoku
         private bool check_win_point(int x, int y)
         {
             bool f;
-            int chessColor = this.game.Chess[x, y];
+            int chessColor = game.Chess[x, y];
 
             // right
             if (x + 5 <= 15)
@@ -195,7 +195,7 @@ namespace Gomoku
 
                 for (int k = 1; k <= 4; k++)
                 {
-                    if (this.game.Chess[x + k, y] != chessColor)
+                    if (game.Chess[x + k, y] != chessColor)
                     {
                         f = false;
                         break;
@@ -203,7 +203,7 @@ namespace Gomoku
                 }
                 if (f)
                 {
-                    this.game.Winner = chessColor;
+                    game.Winner = chessColor;
                     return true;
                 }
             }
@@ -214,7 +214,7 @@ namespace Gomoku
 
                 for (int k = 1; k <= 4; k++)
                 {
-                    if (this.game.Chess[x, y + k] != chessColor)
+                    if (game.Chess[x, y + k] != chessColor)
                     {
                         f = false;
                         break;
@@ -222,7 +222,7 @@ namespace Gomoku
                 }
                 if (f)
                 {
-                    this.game.Winner = chessColor;
+                    game.Winner = chessColor;
                     return true;
                 }
             }
@@ -233,7 +233,7 @@ namespace Gomoku
 
                 for (int k = 1; k <= 4; k++)
                 {
-                    if (this.game.Chess[x + k, y + k] != chessColor)
+                    if (game.Chess[x + k, y + k] != chessColor)
                     {
                         f = false;
                         break;
@@ -241,7 +241,7 @@ namespace Gomoku
                 }
                 if (f)
                 {
-                    this.game.Winner = chessColor;
+                    game.Winner = chessColor;
                     return true;
                 }
             }
@@ -252,7 +252,7 @@ namespace Gomoku
 
                 for (int k = 1; k <= 4; k++)
                 {
-                    if (this.game.Chess[x + k, y - k] != chessColor)
+                    if (game.Chess[x + k, y - k] != chessColor)
                     {
                         f = false;
                         break;
@@ -260,7 +260,7 @@ namespace Gomoku
                 }
                 if (f)
                 {
-                    this.game.Winner = chessColor;
+                    game.Winner = chessColor;
                     return true;
                 }
             }
@@ -275,7 +275,7 @@ namespace Gomoku
             {
                 for (int j = 0; j < 15; j++)
                 {
-                    if (this.game.Chess[i, j] == 0)
+                    if (game.Chess[i, j] == 0)
                     {
                         full = false;
                     }
@@ -283,8 +283,8 @@ namespace Gomoku
                     {
                         if (check_win_point(i, j))
                         {
-                            this.game.Start = false;
-                            switch (this.game.Winner)
+                            game.Start = false;
+                            switch (game.Winner)
                             {
                                 case 1:
                                     MessageBox.Show("BLACK WIN!!!", "WIN");
@@ -301,8 +301,8 @@ namespace Gomoku
 
                 if (full)
                 {
-                    this.game.Start = false;
-                    this.game.Winner = 0;
+                    game.Start = false;
+                    game.Winner = 0;
                     MessageBox.Show("DRAW!!!", "DRAW");
 
                     return true;
@@ -315,14 +315,14 @@ namespace Gomoku
         {
             try
             {
-                if (this.game.Start && this.game.AllowToMove)
+                if (game.Start && game.AllowToMove)
                 {
-                    this.game.AllowToMove = false;
+                    game.AllowToMove = false;
 
                     int x = (e.X - 5) / 50;
                     int y = (e.Y - 5) / 50;
 
-                    if (this.game.Chess[x, y] != 0)
+                    if (game.Chess[x, y] != 0)
                     {
                         MessageBox.Show("这个地方已经下过了!!!", "WRONG");
                     }
@@ -330,11 +330,11 @@ namespace Gomoku
                     {
                         if (x >= 0 && x < 15 && y >= 0 && y < 15)
                         {
-                            if (this.game.WhoToMove == 1)
+                            if (game.WhoToMove == 1)
                             {
-                                this.game.Chess[x, y] = 1;
-                                int f = this.forbidden.forbidden(x, y);
-                                this.game.Chess[x, y] = 0;
+                                game.Chess[x, y] = 1;
+                                int f = forbidden.forbidden(game.Chess, x, y);
+                                game.Chess[x, y] = 0;
 
                                 if (f != 0)
                                 {
@@ -354,28 +354,28 @@ namespace Gomoku
 
                                     if (dialogResult == DialogResult.Yes)
                                     {
-                                        this.game.AllowToMove = true;
+                                        game.AllowToMove = true;
                                         return;
                                     }
                                     else
                                     {
                                         MessageBox.Show("WHITE WIN!!!", "WIN");
-                                        this.game.Start = false;
+                                        game.Start = false;
                                         return;
                                     }
                                 }
                             }
 
-                            this.game.BlackTimeThis = 0;
-                            this.game.WhiteTimeThis = 0;
-                            this.black_time_this.Text = "步时: 0秒";
-                            this.white_time_this.Text = "步时: 0秒";
+                            game.BlackTimeThis = 0;
+                            game.WhiteTimeThis = 0;
+                            black_time_this.Text = "步时: 0秒";
+                            white_time_this.Text = "步时: 0秒";
 
-                            this.game.Move(x, y);
+                            game.Move(x, y);
                             
-                            Image img = this.ChessBoard.Image;
+                            Image img = ChessBoard.Image;
                             Graphics gra = Graphics.FromImage(img);
-                            switch (this.game.WhoToMove)
+                            switch (game.WhoToMove)
                             {
                                 case 1:
                                     gra.FillEllipse(blackBrush, x * 50 + 15, y * 50 + 15, 30, 30);
@@ -384,36 +384,36 @@ namespace Gomoku
                                     gra.FillEllipse(whiteBrush, x * 50 + 15, y * 50 + 15, 30, 30);
                                     break;
                             }
-                            this.ChessBoard.Image = img;
+                            ChessBoard.Image = img;
 
 
-                            if (this.check_win())
+                            if (check_win())
                             {
                                 return;
                             }
 
-                            if (this.game.HumanVShuman)
+                            if (game.HumanVShuman)
                             {
-                                this.game.WhoToMove = 3 - this.game.WhoToMove;
+                                game.WhoToMove = 3 - game.WhoToMove;
                             }
 
-                            if (this.game.HumanVSai)
+                            if (game.HumanVSai)
                             {
-                                this.game.WhoToMove = 3 - this.game.WhoToMove;
+                                game.WhoToMove = 3 - game.WhoToMove;
 
                                 ai_move();
 
-                                if (this.check_win())
+                                if (check_win())
                                 {
                                     return;
                                 }
                                 
-                                this.game.WhoToMove = 3 - this.game.WhoToMove;
+                                game.WhoToMove = 3 - game.WhoToMove;
                             }
                         }
                     }
 
-                    this.game.AllowToMove = true;
+                    game.AllowToMove = true;
                 }
             }
             catch
@@ -441,11 +441,11 @@ namespace Gomoku
         {
             try
             {
-                this.restart_for_new_game();
-                this.game.Start = true;
-                this.game.AllowToMove = true;
-                this.game.HumanVShuman = true;
-                this.timer1.Enabled = true;
+                restart_for_new_game();
+                game.Start = true;
+                game.AllowToMove = true;
+                game.HumanVShuman = true;
+                timer1.Enabled = true;
             }
             catch
             {
@@ -460,17 +460,17 @@ namespace Gomoku
             try
             {
                 DialogResult dialogResult = MessageBox.Show("AI先生很厉害的，你要持黑棋吗?", "", MessageBoxButtons.YesNo);
-                this.ai = new AI();
-                this.restart_for_new_game();
-                this.game.Start = true;
-                this.game.HumanVSai = true;
-                this.timer1.Enabled = true;
+                ai = new AI();
+                restart_for_new_game();
+                game.Start = true;
+                game.HumanVSai = true;
+                timer1.Enabled = true;
                 if (dialogResult == DialogResult.No)
                 {
                     ai_move();
-                    this.game.WhoToMove = 3 - this.game.WhoToMove;
+                    game.WhoToMove = 3 - game.WhoToMove;
                 }
-                this.game.AllowToMove = true;
+                game.AllowToMove = true;
             }
             catch
             {
@@ -492,10 +492,10 @@ namespace Gomoku
                     // MessageBox.Show(json, "INFO");
 
                     Game loadGame = JsonConvert.DeserializeObject<Game>(json);
-                    this.restart_for_new_game();
-                    this.game = loadGame;
-                    this.timer1.Enabled = true;
-                    global::Gomoku.ChessBoard.DrawCB(this, graphic, this.ChessBoard);
+                    restart_for_new_game();
+                    game = loadGame;
+                    timer1.Enabled = true;
+                    global::Gomoku.ChessBoard.DrawCB(this, graphic, ChessBoard);
                 }
             }
             catch
@@ -513,7 +513,7 @@ namespace Gomoku
                 try
                 {
                     StreamWriter streamWriter = new StreamWriter(saveFileDialog.FileName);
-                    string json = JsonConvert.SerializeObject(this.game);
+                    string json = JsonConvert.SerializeObject(game);
                     streamWriter.Write(json);
                     streamWriter.Close();
                 }
@@ -554,13 +554,25 @@ namespace Gomoku
 
         public int Chess(int x, int y)
         {
-            if (this.game == null)
+            if (game == null)
             {
                 return 0;
             }
             else
             {
-                return this.game.Chess[x, y];
+                return game.Chess[x, y];
+            }
+        }
+        public bool Chess(int x, int y, int color)
+        {
+            if (game == null)
+            {
+                return false;
+            }
+            else
+            {
+                game.Chess[x, y] = color;
+                return true;
             }
         }
     }
