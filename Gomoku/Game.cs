@@ -48,6 +48,7 @@ namespace Gomoku
             Moves[Steps, 4] = BlackTime;
             Moves[Steps, 5] = WhiteTime;
 
+            Connect.move(x, y, WhoToMove);
 
             Steps++;
         }

@@ -54,6 +54,8 @@ namespace Gomoku
             black_time_this.Text = "步时: 0秒";
             white_time_all.Text = "局时: 0秒";
             white_time_this.Text = "步时: 0秒";
+
+            Connect.new_game();
         }
 
         private void ai_move()

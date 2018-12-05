@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AI.cs" />
     <Compile Include="ChessBoard.cs" />
+    <Compile Include="Connect.cs" />
     <Compile Include="Forbidden.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
