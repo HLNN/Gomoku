@@ -11,7 +11,7 @@ namespace Gomoku
 {
     class Connect
     {
-        static string url = "http://";
+        static string url = Config.url;
 
         public static string GetHttpResponse(string url, int Timeout)
         {
