@@ -1,57 +1,66 @@
 # Gomoku
 
-»ùÓÚC#µÄGUIÎå×ÓÆå
+åŸºäºŽC#çš„GUIäº”å­æ£‹
 
-  - µçÄÔAIºÍµ¥»úË«ÈË¶ÔÕ½Ë«Ä£Ê½
-  - Ö§³Ö½ûÊÖ
-  - Ö§³ÖËæÊ±±£´æ/µ¼ÈëÆå¾Ö
-  - Ö§³ÖËæÊ±¸´ÅÌ
-  - ÓÐ¼òµ¥Ö±²¥¹¦ÄÜ
-
-
-### ½ûÊÖ
-
-½ûÊÖ¹¦ÄÜÄ¬ÈÏ¿ªÆô£¬Ö§³ÖÅÐ¶ÏÈýÈý£¬ËÄËÄºÍ³¤Á¬½ûÊÖ
+  - ç”µè„‘AIå’Œå•æœºåŒäººå¯¹æˆ˜åŒæ¨¡å¼
+  - æ”¯æŒç¦æ‰‹
+  - æ”¯æŒéšæ—¶ä¿å­˜/å¯¼å…¥æ£‹å±€
+  - æ”¯æŒéšæ—¶å¤ç›˜
+  - æœ‰ç®€å•ç›´æ’­åŠŸèƒ½
 
 
-### ±£´æ/µ¼ÈëÆå¾Ö
+### ç¦æ‰‹
 
-²Ëµ¥À¸`Æå¾Ö`ÖÐ¿ÉÒÔÑ¡Ôñ`µ¼ÈëÆå¾Ö`»òÕß`±£´æÆå¾Ö`À´ÊµÏÖÆå¾ÖµÄµ¼ÈëºÍ±£´æ
-
-Æå¾ÖÊý¾Ý½«±»ÐòÁÐ»¯Îª`json`¸ñÊ½½øÐÐ±£´æ£¬Ö§³Ö`.json`ºÍ`.txt`Á½ÕÅÎÄ¼þºó×º
+ç¦æ‰‹åŠŸèƒ½é»˜è®¤å¼€å¯ï¼Œæ”¯æŒåˆ¤æ–­ä¸‰ä¸‰ï¼Œå››å››å’Œé•¿è¿žç¦æ‰‹
 
 
-### ¸´ÅÌ
+### ä¿å­˜/å¯¼å…¥æ£‹å±€
 
-Æå¾Ö½øÐÐµ½ÈÎÒâÊ±¿Ì¶¼¿ÉÒÔ½øÐÐ¸´ÅÌ£¬°´ÏÂÆåµÄÊ±¼äË³Ðò½øÐÐ¸´ÅÌ¡£Ä¿Ç°TimerÉèÖÃÎª1s£¬ËùÒÔÏÂÆåÊ±¼ä¼ä¸ôÐ¡ÓÚ1sµÄÇé¿öµÄÊ±ºò£¬Æå×Ó»áÁ¬Ðø³öÏÖ¡£
+èœå•æ `æ£‹å±€`ä¸­å¯ä»¥é€‰æ‹©`å¯¼å…¥æ£‹å±€`æˆ–è€…`ä¿å­˜æ£‹å±€`æ¥å®žçŽ°æ£‹å±€çš„å¯¼å…¥å’Œä¿å­˜
+
+æ£‹å±€æ•°æ®å°†è¢«åºåˆ—åŒ–ä¸º`json`æ ¼å¼è¿›è¡Œä¿å­˜ï¼Œæ”¯æŒ`.json`å’Œ`.txt`ä¸¤å¼ æ–‡ä»¶åŽç¼€
 
 
-### Ö±²¥
+### å¤ç›˜
 
-ÈçÐèÒªÆôÓÃÖ±²¥¹¦ÄÜ£¬ÇëÔÚ`Config.cs`ÎÄ¼þÖÐÅäÖÃ·þÎñÆ÷µÄIP»òÓòÃû
+æ£‹å±€è¿›è¡Œåˆ°ä»»æ„æ—¶åˆ»éƒ½å¯ä»¥è¿›è¡Œå¤ç›˜ï¼ŒæŒ‰ä¸‹æ£‹çš„æ—¶é—´é¡ºåºè¿›è¡Œå¤ç›˜ã€‚ç›®å‰Timerè®¾ç½®ä¸º1sï¼Œæ‰€ä»¥ä¸‹æ£‹æ—¶é—´é—´éš”å°äºŽ1sçš„æƒ…å†µçš„æ—¶å€™ï¼Œæ£‹å­ä¼šè¿žç»­å‡ºçŽ°ã€‚
 
-·þÎñ¶ËÊ¹ÓÃPython3±àÐ´£¬ÇëÓÃÈçÏÂÃüÁî°²×°Python3£º
+
+### ç›´æ’­
+
+å¦‚éœ€è¦å¯ç”¨ç›´æ’­åŠŸèƒ½ï¼Œè¯·åœ¨`Config.cs`æ–‡ä»¶ä¸­é…ç½®æœåŠ¡å™¨çš„IPæˆ–åŸŸå
+
+æœåŠ¡ç«¯ä½¿ç”¨Python3ç¼–å†™ï¼Œè¯·ç”¨å¦‚ä¸‹å‘½ä»¤å®‰è£…Python3ï¼š
 
 
 ```sh
 sudo apt-get install python3 python3-pip
 ```
 
-²¢°²×°ÏàÓ¦ÒÀÀµ°ü`falcon`£º
+å¹¶å®‰è£…ç›¸åº”ä¾èµ–åŒ…`falcon`ï¼š
 
 ```sh
 pip3 install falcon 
 pip3 install gunicorn
 ```
 
-°²×°Íê³ÉºóÔÚ`Server`Â·¾¶ÏÂÖ´ÐÐÒÔÏÂÃüÁî¾Í¿ÉÒÔÁË
+å®‰è£…å®ŒæˆåŽåœ¨`Server`è·¯å¾„ä¸‹æ‰§è¡Œä»¥ä¸‹å‘½ä»¤å°±å¯ä»¥äº†
 
 ```sh
 bash run.sh
 ```
 
-[ÔÚGithubÖÐ´ò¿ª]
+
+### å‚è€ƒ
+
+[ztxz16/renju]
+
+
+[åœ¨Githubä¸­æ‰“å¼€æ­¤é¡¹ç›®]
+
+
 
 ----
 
-[ÔÚGithubÖÐ´ò¿ª]:<https://github.com/HLNN/Gomoku>
+[ztxz16/renju]:<https://github.com/ztxz16/renju>
+[åœ¨Githubä¸­æ‰“å¼€æ­¤é¡¹ç›®]:<https://github.com/HLNN/Gomoku>
